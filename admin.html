@@ -364,7 +364,7 @@ function showPending(){
 
 let catdisc=[];try{catdisc=JSON.parse(localStorage.getItem("inga_catdisc")||"[]");}catch(e){}
 let settings;try{settings=JSON.parse(localStorage.getItem("inga_settings"));}catch(e){}
-settings=Object.assign({wa:"5493764000000",btn:"Finalizar compra por WhatsApp"},settings||{});
+settings=Object.assign({wa:"5493765247994",btn:"Finalizar compra por WhatsApp"},settings||{});
 
 const lbl2=v=>v[0]==="p"?v.slice(1)+"% OFF":"$"+Number(v.slice(1)).toLocaleString("es-AR")+" menos";
 const saveCD=()=>localStorage.setItem("inga_catdisc",JSON.stringify(catdisc));
