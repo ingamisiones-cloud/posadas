@@ -1,4 +1,8 @@
 {
+  "settings": {
+    "wa": "5493765247994",
+    "btn": "Finalizar compra por WhatsApp"
+  },
   "cats": [
     {
       "n": "Todos",
