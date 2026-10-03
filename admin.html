@@ -34,14 +34,6 @@ header h1{margin:0;font-size:1.4rem;}
 
 .crop-wrap{display:flex;justify-content:center}.crop-frame{position:relative;overflow:hidden;background:#fff;outline:4px dashed var(--ac);cursor:grab;touch-action:none;margin:4px}.crop-frame.circ{border-radius:50%}.crop-frame img{position:absolute;max-width:none;user-select:none;-webkit-user-drag:none;pointer-events:none}
 .thumb{object-fit:cover;background:#fff;border:1px solid var(--ln);border-radius:6px;vertical-align:middle;flex-shrink:0}.mini{padding:4px 10px;font-size:.8rem}
-
-.promo-btn{border:0;padding:8px 18px;font-weight:800;position:relative;cursor:pointer;background:#f4c430;color:#1b2a1e}.promo-btn[hidden]{display:none}
-.fx-pulse{animation:fxp .5s}@keyframes fxp{50%{transform:scale(1.18)}}
-.fx-jump{animation:fxj .6s}@keyframes fxj{30%{transform:translateY(-12px) rotate(-4deg)}60%{transform:none}80%{transform:translateY(-4px)}}
-.fx-shine{overflow:hidden}.fx-shine::after{content:"";position:absolute;top:0;bottom:0;width:40%;left:-60%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.75),transparent);animation:fxs .7s}@keyframes fxs{to{left:130%}}
-.fx-bit{position:fixed;pointer-events:none;width:20px;height:20px;z-index:99;animation:fxb .9s forwards;font-size:18px;line-height:1}@keyframes fxb{from{opacity:1}to{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--r))}}
-.poster{aspect-ratio:4/5;width:100%;max-width:320px;margin:0 auto;border-radius:12px;overflow:hidden;position:relative;box-shadow:0 6px 20px rgba(0,0,0,.25)}.poster>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.pin{position:absolute;inset:0;padding:12% 11%;overflow:auto;text-align:center}.pin h3{margin:0 0 10px;font-size:1.5rem}.pit{margin:12px 0;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.25)}.pit b{display:block}.pit em{font-style:normal;font-weight:800;font-size:1.25rem}.pit p{margin:2px 0 0;font-size:.85rem;opacity:.9}.pty{font-size:.7rem;font-weight:800;padding:1px 8px;border-radius:99px;display:inline-block;margin-bottom:2px}
 .fld{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}.fld label{font-size:.85rem;font-weight:700;display:block}.fld input[type=color]{height:40px;padding:2px}
 </style>
 </head>
@@ -60,6 +52,7 @@ function cerrarSesion() {
 <header>
     <h1>⚙️ Panel Modo Dios - Ingá</h1>
     <div>
+        <button class="god-btn" style="background:#27ae60; color:#fff; margin-right:10px;" onclick="exportarDatosJSON()">📥 Descargar datos.json</button>
         <button class="god-btn" style="background:#e5891b; color:#111; margin-right:10px;" onclick="window.open('index.html','_blank')">Ver Tienda</button>
         <button class="god-btn god-btn-danger" onclick="cerrarSesion()">Cerrar Sesión</button>
     </div>
@@ -67,36 +60,36 @@ function cerrarSesion() {
 
 <div class="container">
     
+    <div class="card" style="border: 2px solid #27ae60; background: #eef9f2;">
+        <h3 style="color:#27ae60;">💾 Sincronización con GitHub</h3>
+        <p style="font-size: 0.9rem; margin-top:0;">Cada vez que agregues o borres productos/categorías, hacé clic en <strong>"📥 Descargar datos.json"</strong> (arriba a la derecha o aquí abajo). Ese archivo descargado lo guardás en tu carpeta principal y lo subís a GitHub junto con tus imágenes.</p>
+        <button class="god-btn" style="background:#27ae60; width:100%;" onclick="exportarDatosJSON()">📥 Descargar datos.json actualizado</button>
+    </div>
+
     <!-- Gestor Superior Isologo -->
     <div class="card">
         <h3>Gestor de Banners Isologo (Lados Izquierdo y Derecho)</h3>
-        
         <div style="background:var(--bg); padding:12px; border-radius:8px; margin-bottom:12px; border:1px solid var(--ln);">
             <h4>Lado Izquierdo (Isologo)</h4><img id="god-left-prev" class="thumb" style="width:200px;aspect-ratio:5/2;display:none;margin-bottom:8px" onerror="this.style.display='none'">
             <button class="god-btn" onclick="openCropModal('header-left', 260, 104, '')" style="margin-bottom:8px; width:100%; background:#e5891b; color:#111;">Subir y Recortar Flyer Izquierdo</button>
             <label style="font-size:0.9rem; display:flex; align-items:center; gap:6px;"><input type="checkbox" id="god-left-active"> Activar banner en la tienda</label>
         </div>
-
         <div style="background:var(--bg); padding:12px; border-radius:8px; margin-bottom:12px; border:1px solid var(--ln);">
             <h4>Lado Derecho (Isologo)</h4><img id="god-right-prev" class="thumb" style="width:200px;aspect-ratio:5/2;display:none;margin-bottom:8px" onerror="this.style.display='none'">
             <button class="god-btn" onclick="openCropModal('header-right', 260, 104, '')" style="margin-bottom:8px; width:100%; background:#e5891b; color:#111;">Subir y Recortar Flyer Derecho</button>
             <label style="font-size:0.9rem; display:flex; align-items:center; gap:6px;"><input type="checkbox" id="god-right-active"> Activar banner en la tienda</label>
         </div>
-
         <button class="god-btn" id="god-save-header-promo" style="width:100%;">Guardar Promos del Isologo</button>
     </div>
 
-    <!-- Gestor de Pancartas de Tienda (Zona Verde) -->
+    <!-- Gestor de Encabezado y Pancarta -->
     <div class="card">
         <h3>Gestor de Encabezado y Pancarta de Tienda (Zona Verde)</h3>
         <label style="font-weight:bold; font-size:0.9rem; display:block; margin-bottom:4px;">Título Principal:</label>
         <input type="text" id="god-hero-title" class="god-input">
-        
         <label style="font-weight:bold; font-size:0.9rem; display:block; margin-bottom:4px;">Subtítulo:</label>
         <input type="text" id="god-hero-sub" class="god-input">
-
         <button class="god-btn" onclick="openCropModal('hero-banner', 420, 260, 'crop-area-hero')" style="margin-bottom:12px; width:100%; background:#e5891b; color:#111;">+ Subir y Recortar Pancarta Grande (Derecha)</button>
-        
         <div id="god-banners-list" style="margin-top:10px;"></div>
         <button class="god-btn" id="god-save-hero" style="margin-top:14px; width:100%;">Guardar Encabezado</button>
     </div>
@@ -105,7 +98,8 @@ function cerrarSesion() {
     <div class="card">
         <h3>Gestor de Categorías</h3>
         <input type="text" id="god-cat-name" class="god-input" placeholder="Nombre de categoría (ej: Artesanías)">
-        <button class="god-btn" onclick="openCropModal('category', 260, 260, 'crop-area-circ', true)" style="margin-bottom:12px; width:100%;">Subir y Recortar Icono / Foto Circular</button>
+        <input type="text" id="god-cat-img" class="god-input" placeholder="Ruta de imagen en carpeta (ej: imagenes/artesanias.png)">
+        <button class="god-btn" onclick="openCropModal('category', 260, 260, 'crop-area-circ', true)" style="margin-bottom:12px; width:100%;">O Subir y Recortar Icono / Foto Circular</button>
         <div id="cat-preview" style="margin-bottom:10px"></div>
         <button class="god-btn" id="god-add-cat">Agregar Categoría</button>
         <div id="god-cats-list" style="margin-top:14px;"></div>
@@ -114,10 +108,11 @@ function cerrarSesion() {
     <!-- Gestor de Productos -->
     <div class="card">
         <h3>Gestor de Productos</h3>
-        <input type="text" id="god-prod-name" class="god-input" placeholder="Título del producto">
+        <input type="text" id="god-prod-name" class="god-input" placeholder="Título del producto (ej: Bombilla de alpaca)">
         <select id="god-prod-cat" class="god-input"></select>
         <input type="number" id="god-prod-price" class="god-input" placeholder="Precio ($)">
-        <button class="god-btn" onclick="openCropModal('product', 340, 260, 'crop-area-prod')" style="margin-bottom:12px; width:100%;">Subir y Recortar Foto del Producto</button>
+        <input type="text" id="god-prod-img" class="god-input" placeholder="Ruta en carpeta imagenes/ (ej: imagenes/bombilla_alpaca.png)">
+        <button class="god-btn" onclick="openCropModal('product', 340, 260, 'crop-area-prod')" style="margin-bottom:12px; width:100%;">O Subir y Recortar Foto del Producto</button>
         <div id="prod-preview" style="margin-bottom:10px"></div>
         <button class="god-btn" id="god-add-prod">Guardar Producto</button>
         <div id="god-prods-list" style="margin-top:14px;"></div>
@@ -125,7 +120,6 @@ function cerrarSesion() {
 
     <div class="card">
         <h3>Descuentos por categoría</h3>
-        <p style="font-size:.9rem;color:var(--mu);margin-top:0">Cargá un descuento una sola vez y se aplicará automáticamente a todos los productos de esa categoría, incluidos los que agregues después. Desde acá también podés excluir productos puntuales.</p>
         <div class="fld">
             <div><label>Categoría</label><select class="god-input" id="cd-cat"></select></div>
             <div><label>Título del descuento</label><input class="god-input" id="cd-title" placeholder="Ej: Promo Mates"></div>
@@ -135,14 +129,14 @@ function cerrarSesion() {
         <div id="cd-list"></div>
         <div id="cd-exclusions" style="margin-top:14px"></div>
     </div>
+
     <div class="card">
         <h3>WhatsApp y botón de compra</h3>
         <label style="font-weight:700;font-size:.9rem">Número de WhatsApp (con código de país, solo números)</label>
         <input class="god-input" id="wa-num" inputmode="numeric" placeholder="Ej: 5493764123456">
         <label style="font-weight:700;font-size:.9rem">Texto del botón final del carrito</label>
         <input class="god-input" id="wa-btn" maxlength="40">
-        <button class="god-btn" id="wa-save">Guardar</button>
-        <p style="font-size:.85rem;color:var(--mu);margin:10px 0 0">Este número recibe los pedidos y aparece en el pie de la tienda.</p>
+        <button class="god-btn" id="wa-save">Guardar Configuración</button>
     </div>
 
 </div>
@@ -162,40 +156,45 @@ function cerrarSesion() {
 </div>
 
 <script>
-let DEFAULT_CATS=[
-  {n:"Todos", e:"🌿", img:""},
-  {n:"Cocina", e:"🍳", img:"imagenes/cocina.png"},
-  {n:"Mate", e:"🧉", img:"imagenes/mate.png"},
-  {n:"Baño", e:"🛁", img:"imagenes/bano.png"},
-  {n:"Bazar", e:"🧺", img:"imagenes/bazar.png"},
-  {n:"Dormitorio", e:"🛏️", img:"imagenes/dormitorio.png"},
-  {n:"Aromas", e:"✨", img:"imagenes/aromas.png"}
-];
-
-let DEFAULT_PRODS=[
-  {id:1,n:"Set de cocina",c:"Cocina",p:22500,img:"imagenes/cocina.png"},
-  {id:2,n:"Mate y bombilla",c:"Mate",p:12900,img:"imagenes/bombilla.png"},
-  {id:3,n:"Termo 1L",c:"Mate",p:24800,img:"imagenes/termo.png"},
-  {id:4,n:"Toalla de baño",c:"Baño",p:9800,img:"imagenes/toalla.png"},
-  {id:5,n:"Difusor de aromas",c:"Aromas",p:8500,img:"imagenes/difusor.png"},
-  {id:6,n:"Colcha 2 plazas",c:"Dormitorio",p:31900,img:"imagenes/colcha.png"},
-  {id:7,n:"Cesto organizador",c:"Bazar",p:8700,img:"imagenes/cesto.png"},
-  {id:8,n:"Set de tazas",c:"Cocina",p:11600,img:"imagenes/tazas.png"}
-];
-
-let cats = JSON.parse(localStorage.getItem("inga_cats") || JSON.stringify(DEFAULT_CATS));
-let productos = JSON.parse(localStorage.getItem("inga_prods") || JSON.stringify(DEFAULT_PRODS));
+let cats = [];
+let productos = [];
 let heroConfig = JSON.parse(localStorage.getItem("inga_hero_config") || '{"title":"Bajamos el precio, no la calidad.","subtitle":"Cocina, baño, mate, bazar, dormitorio y aromas. Tu casa con raíz Misionera","banners":[]}');
 let headerPromo = JSON.parse(localStorage.getItem("inga_header_promo") || '{"leftImg":"","leftActive":false,"rightImg":"","rightActive":false}');
 
-const saveAll=()=>{
-  try{
-    localStorage.setItem("inga_cats", JSON.stringify(cats));
-    localStorage.setItem("inga_prods", JSON.stringify(productos));
-    localStorage.setItem("inga_hero_config", JSON.stringify(heroConfig));
-    localStorage.setItem("inga_header_promo", JSON.stringify(headerPromo));
-  }catch(e){ alert("No hay más espacio en el navegador para guardar. Probá con fotos más livianas o borrá alguna."); }
+async function loadAdminData() {
+  try {
+    const res = await fetch('datos.json');
+    const data = await res.json();
+    cats = data.cats || [];
+    productos = data.productos || [];
+  } catch(e) {
+    cats = JSON.parse(localStorage.getItem("inga_cats") || "[]");
+    productos = JSON.parse(localStorage.getItem("inga_prods") || "[]");
+  }
+  renderGodMode();
+  renderPromoAdmin();
+}
+
+const saveLocal=()=>{
+  localStorage.setItem("inga_cats", JSON.stringify(cats));
+  localStorage.setItem("inga_prods", JSON.stringify(productos));
+  localStorage.setItem("inga_hero_config", JSON.stringify(heroConfig));
+  localStorage.setItem("inga_header_promo", JSON.stringify(headerPromo));
 };
+
+function exportarDatosJSON() {
+  saveLocal();
+  const data = { cats, productos };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "datos.json";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  alert("¡Archivo 'datos.json' descargado con éxito! Guárdalo en tu carpeta del proyecto y súbelo a GitHub.");
+}
 
 const $=id=>document.getElementById(id);
 
@@ -231,50 +230,52 @@ function renderGodMode(){
   $("god-prods-list").innerHTML = productos.map((p, i)=>`
     <div class="god-list-item">
       <div style="display:flex;align-items:center;gap:10px;">${p.img?`<img class="thumb" src="${p.img}" style="width:52px;aspect-ratio:34/26" onerror="this.style.display='none'">`:`<span class="thumb" style="width:52px;aspect-ratio:34/26;display:inline-grid;place-items:center;font-size:.65rem;color:var(--mu)">Sin foto</span>`}<div><b>${p.n}</b><br><small>$${p.p}</small></div></div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button class="god-btn mini" style="background:#f4c430;color:#111" onclick="saveAll();location.href='descuento.html?id=${p.id}'">${p.promo?'Editar descuento':'Agregar descuento'}</button><button class="god-btn mini" style="background:#e5891b;color:#111" onclick="editImg('prod-edit',${i})">Cambiar imagen</button><button class="god-btn god-btn-danger mini" onclick="deleteProd(${i})">Borrar</button></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button class="god-btn mini" style="background:#f4c430;color:#111" onclick="saveLocal();exportarDatosJSON();location.href='descuento.html?id=${p.id}'">${p.promo?'Editar descuento':'Agregar descuento'}</button><button class="god-btn mini" style="background:#e5891b;color:#111" onclick="editImg('prod-edit',${i})">Cambiar imagen</button><button class="god-btn god-btn-danger mini" onclick="deleteProd(${i})">Borrar</button></div>
     </div>`).join("");
 }
 
 $("god-save-header-promo").onclick = () => {
   headerPromo.leftActive = $("god-left-active").checked;
   headerPromo.rightActive = $("god-right-active").checked;
-  saveAll();
-  alert("¡Promociones del isologo guardadas!");
+  saveLocal();
+  exportarDatosJSON();
 };
 
 $("god-save-hero").onclick = () => {
   heroConfig.title = $("god-hero-title").value;
   heroConfig.subtitle = $("god-hero-sub").value;
-  saveAll();
-  alert("¡Encabezado guardado!");
+  saveLocal();
+  exportarDatosJSON();
 };
 
-window.toggleBanner = i => { heroConfig.banners[i].active = !heroConfig.banners[i].active; saveAll(); renderGodMode(); };
-window.deleteBanner = i => { heroConfig.banners.splice(i, 1); saveAll(); renderGodMode(); };
+window.toggleBanner = i => { heroConfig.banners[i].active = !heroConfig.banners[i].active; saveLocal(); renderGodMode(); };
+window.deleteBanner = i => { heroConfig.banners.splice(i, 1); saveLocal(); renderGodMode(); };
 
 $("god-add-cat").onclick = () => {
   const name = $("god-cat-name").value.trim();
+  const imgPath = $("god-cat-img").value.trim();
   if(!name) return alert("Escribe un nombre de categoría.");
-  cats.push({n: name, e: "✨", img: tempCatImg});
-  tempCatImg = ""; $("god-cat-name").value = "";
-  saveAll(); renderGodMode();
-  alert("¡Categoría agregada con éxito a la tienda!");
+  cats.push({n: name, e: "✨", img: imgPath || tempCatImg});
+  tempCatImg = ""; $("god-cat-name").value = ""; $("god-cat-img").value = "";
+  saveLocal(); renderGodMode();
+  exportarDatosJSON();
 };
 
-window.deleteCat = i => { cats.splice(i, 1); saveAll(); renderGodMode(); };
+window.deleteCat = i => { cats.splice(i, 1); saveLocal(); renderGodMode(); exportarDatosJSON(); };
 
 $("god-add-prod").onclick = () => {
   const name = $("god-prod-name").value.trim();
   const price = parseFloat($("god-prod-price").value);
   const category = $("god-prod-cat").value;
+  const imgPath = $("god-prod-img").value.trim();
   if(!name || isNaN(price)) return alert("Completa nombre y precio válidos.");
-  productos.push({ id: Date.now(), n: name, c: category, p: price, img: tempProdImg });
-  tempProdImg = ""; $("god-prod-name").value = ""; $("god-prod-price").value = "";
-  saveAll(); renderGodMode();
-  alert("¡Producto agregado con éxito a la tienda!");
+  productos.push({ id: Date.now(), n: name, c: category, p: price, img: imgPath || tempProdImg });
+  tempProdImg = ""; $("god-prod-name").value = ""; $("god-prod-price").value = ""; $("god-prod-img").value = "";
+  saveLocal(); renderGodMode();
+  exportarDatosJSON();
 };
 
-window.deleteProd = i => { productos.splice(i, 1); saveAll(); renderGodMode(); };
+window.deleteProd = i => { productos.splice(i, 1); saveLocal(); renderGodMode(); exportarDatosJSON(); };
 
 let currentTarget="", currentIndex=null, targetWidth=420, targetHeight=260, exportW=630, isCircular=false, tempCatImg="", tempProdImg="";
 const TITLES={'promo-img':'imagen del cartel','header-left':'flyer izquierdo','header-right':'flyer derecho','hero-banner':'pancarta grande','hero-edit':'pancarta','category':'icono de categoría','cat-edit':'icono de categoría','product':'foto del producto','prod-edit':'foto del producto'};
@@ -350,9 +351,9 @@ function applyCrop(d){
   else if(t === 'hero-edit'){ heroConfig.banners[i].img = d; }
   else if(t === 'cat-edit'){ cats[i].img = d; }
   else if(t === 'prod-edit'){ productos[i].img = d; }
-  else if(t === 'category'){ tempCatImg = d; }
-  else if(t === 'product'){ tempProdImg = d; }
-  saveAll(); renderGodMode();
+  else if(t === 'category'){ tempCatImg = d; $("god-cat-img").value = d; }
+  else if(t === 'product'){ tempProdImg = d; $("god-prod-img").value = d; }
+  saveLocal(); renderGodMode(); exportarDatosJSON();
 }
 
 function showPending(){
@@ -380,32 +381,29 @@ function renderCategoryExclusions(){
   const cat=$("cd-cat")?.value;
   if(!cat){$("cd-exclusions").innerHTML="";return;}
   const ds=catdisc.filter(d=>d.cat===cat);
-  if(!ds.length){$("cd-exclusions").innerHTML='<p style="font-size:.85rem;color:var(--mu)">No hay descuentos activos/configurados para esta categoría todavía.</p>';return;}
+  if(!ds.length){$("cd-exclusions").innerHTML='<p style="font-size:.85rem;color:var(--mu)">No hay descuentos activos.</p>';return;}
   const ps=productos.filter(p=>p.c===cat);
-  $("cd-exclusions").innerHTML=`<div style="border-top:1px solid var(--ln);padding-top:12px"><b>Excluir productos de esta categoría</b><p style="font-size:.82rem;color:var(--mu);margin:4px 0 10px">Marcá un producto si querés que NO reciba los descuentos de categoría seleccionados.</p>${ds.map(d=>`<div style="background:var(--bg);border:1px solid var(--ln);border-radius:8px;padding:10px;margin-bottom:10px"><b>${d.title} – ${lbl2(d.val)}</b>${ps.length?ps.map(p=>`<label style="display:flex;align-items:center;gap:7px;font-size:.88rem;margin-top:7px"><input type="checkbox" ${((p.excl||[]).includes(d.id))?'checked':''} onchange="setCategoryExclusion(${p.id},${d.id},this.checked)"> Excluir <b>${p.n}</b></label>`).join(""):'<p style="font-size:.82rem;color:var(--mu)">No hay productos en esta categoría.</p>'}</div>`).join("")}</div>`;
+  $("cd-exclusions").innerHTML=`<div style="border-top:1px solid var(--ln);padding-top:12px"><b>Excluir productos</b>${ds.map(d=>`<div style="background:var(--bg);border:1px solid var(--ln);border-radius:8px;padding:10px;margin-bottom:10px"><b>${d.title} – ${lbl2(d.val)}</b>${ps.length?ps.map(p=>`<label style="display:flex;align-items:center;gap:7px;font-size:.88rem;margin-top:7px"><input type="checkbox" ${((p.excl||[]).includes(d.id))?'checked':''} onchange="setCategoryExclusion(${p.id},${d.id},this.checked)"> Excluir <b>${p.n}</b></label>`).join(""):'<p style="font-size:.82rem;color:var(--mu)">No hay productos.</p>'}</div>`).join("")}</div>`;
 }
 function renderPromoAdmin(){
   $("wa-num").value=settings.wa;$("wa-btn").value=settings.btn;
   fillCategoryDiscountForm();
-  $("cd-list").innerHTML=catdisc.map((d,i)=>`<div class="god-list-item"><div><b>${d.title}</b> – ${lbl2(d.val)}<br><small>Categoría: ${d.cat} · ${d.active?"Activo":"Inactivo"}</small></div><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button class="god-btn mini" style="background:${d.active?'#27ae60':'#7f8c8d'}" onclick="togCD(${i})">${d.active?'Desactivar':'Activar'}</button><button class="god-btn mini" style="background:#e5891b;color:#111" onclick="focusCDCategory('${d.cat}')">Gestionar exclusiones</button><button class="god-btn god-btn-danger mini" onclick="delCD(${i})">Borrar</button></div></div>`).join("")||'<p style="color:var(--mu);font-size:.85rem;margin:0">Todavía no hay descuentos por categoría.</p>';
+  $("cd-list").innerHTML=catdisc.map((d,i)=>`<div class="god-list-item"><div><b>${d.title}</b> – ${lbl2(d.val)}<br><small>Categoría: ${d.cat} · ${d.active?"Activo":"Inactivo"}</small></div><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button class="god-btn mini" style="background:${d.active?'#27ae60':'#7f8c8d'}" onclick="togCD(${i})">${d.active?'Desactivar':'Activar'}</button><button class="god-btn god-btn-danger mini" onclick="delCD(${i})">Borrar</button></div></div>`).join("")||'<p style="color:var(--mu);font-size:.85rem;margin:0">Todavía no hay descuentos.</p>';
   renderCategoryExclusions();
 }
-window.focusCDCategory=cat=>{if($("cd-cat"))$("cd-cat").value=cat;renderCategoryExclusions();$("cd-title").focus();};
 window.togCD=i=>{catdisc[i].active=!catdisc[i].active;saveCD();renderPromoAdmin();};
-window.delCD=i=>{if(!confirm("Se borra el descuento para toda la categoría. Las exclusiones guardadas quedan en los productos. ¿Continuar?"))return;catdisc.splice(i,1);saveCD();renderPromoAdmin();};
-window.setCategoryExclusion=(pid,did,checked)=>{const p=productos.find(x=>x.id===pid);if(!p)return;p.excl=p.excl||[];p.excl=p.excl.filter(x=>x!==did);if(checked)p.excl.push(did);saveAll();renderCategoryExclusions();};
+window.delCD=i=>{if(!confirm("¿Borrar?"))return;catdisc.splice(i,1);saveCD();renderPromoAdmin();};
+window.setCategoryExclusion=(pid,did,checked)=>{const p=productos.find(x=>x.id===pid);if(!p)return;p.excl=p.excl||[];p.excl=p.excl.filter(x=>x!==did);if(checked)p.excl.push(did);saveLocal();renderCategoryExclusions();};
 if($("cd-cat")) $("cd-cat").onchange=renderCategoryExclusions;
-if($("cd-add")) $("cd-add").onclick=()=>{const cat=$("cd-cat").value,title=$("cd-title").value.trim(),val=$("cd-val").value;if(!cat||!title)return alert("Elegí la categoría y escribí un título para el descuento.");catdisc.push({id:Date.now(),cat,title,val,desc:"",active:true});saveCD();$("cd-title").value="";renderPromoAdmin();alert("Listo: el descuento se cargó a toda la categoría «"+cat+"». Ahora podés excluir productos puntuales si querés.");};
+if($("cd-add")) $("cd-add").onclick=()=>{const cat=$("cd-cat").value,title=$("cd-title").value.trim(),val=$("cd-val").value;if(!cat||!title)return alert("Completá los campos.");catdisc.push({id:Date.now(),cat,title,val,desc:"",active:true});saveCD();$("cd-title").value="";renderPromoAdmin();alert("Descuento cargado.");};
 if($("wa-save")) $("wa-save").onclick=()=>{
   const n=$("wa-num").value.replace(/\D/g,"");
-  if(n.length<10)return alert("Escribí el número completo con código de país (ej: 5493764123456).");
+  if(n.length<10)return alert("Número inválido.");
   settings.wa=n;settings.btn=$("wa-btn").value.trim()||"Finalizar compra por WhatsApp";
-  saveSettings();$("wa-num").value=n;alert("¡Guardado! La tienda ya usa este número.");
+  saveSettings();alert("¡Guardado!");
 };
 
-window.addEventListener("pageshow",e=>{if(e.persisted)location.reload();});
-renderGodMode();
-renderPromoAdmin();
+loadAdminData();
 </script>
 </body>
 </html>
