@@ -273,8 +273,8 @@ const TY={season:"Temporada",combo:"Combo",special:"Especial"};
 const DEF_PROMO={btn:{active:true,label:"Ver descuentos",bg:"#f4c430",color:"#1b2a1e",shape:"pill",anim:"paws"},poster:{mode:"text",title:"Descuentos Ingá",bg:"#1f5a34",color:"#ffffff",accent:"#f4c430",img:""},items:[]};
 let promo;try{promo=JSON.parse(localStorage.getItem("inga_promo"));}catch(e){}
 promo=Object.assign({},DEF_PROMO,promo||{});promo.btn=Object.assign({},DEF_PROMO.btn,promo.btn);promo.poster=Object.assign({},DEF_PROMO.poster,promo.poster);promo.items=promo.items||[];
-let settings;try{settings=JSON.parse(localStorage.getItem("inga_settings"));}catch(e){}
-settings=Object.assign({wa:"5493765247994",btn:"Finalizar compra por WhatsApp"},settings||{});
+
+let settings = {wa: "5493764000000", btn: "Finalizar compra por WhatsApp"};
 const SHAPES={pill:"99px",round:"10px",square:"2px"};
 function applyBtn(el,b){el.textContent=b.label;el.style.background=b.bg;el.style.color=b.color;el.style.borderRadius=SHAPES[b.shape]||"99px";el.hidden=!b.active;}
 function posterHTML(p){
@@ -344,10 +344,15 @@ async function loadData() {
     const data = await res.json();
     cats = data.cats || [];
     productos = data.productos || [];
+    if(data.settings) settings = Object.assign(settings, data.settings);
   } catch(e) {
     cats = JSON.parse(localStorage.getItem("inga_cats") || "[]");
     productos = JSON.parse(localStorage.getItem("inga_prods") || "[]");
   }
+  
+  $("send").textContent = settings.btn;
+  $("wa-foot").textContent = "+" + settings.wa;
+
   draw();
   cartDraw();
 }
@@ -484,7 +489,6 @@ $("go").onclick=hunt;
 $("q").addEventListener("keydown",e=>{if(e.key==="Enter")hunt()});
 
 $("zona").innerHTML=ZONAS.map((z,i)=>`<option value="${i}">${z.n}${z.c?" – "+$$(z.c):""}</option>`).join("");
-$("send").textContent=settings.btn;$("wa-foot").textContent="+"+settings.wa;
 $("close-promo").onclick=()=>$("promo-modal").classList.remove("open");
 $("btn-help").onclick=()=>$("help-modal").classList.add("open");
 $("close-help").onclick=()=>$("help-modal").classList.remove("open");
